@@ -14,34 +14,17 @@ public class GridDeveloperTest {
         Random randomGenerator = new Random();
 
         //Make the grid
-        int grid[][] = new int[20][20];
+        int grid[][] = new int[21][21];
         
         //Create a scanner
         Scanner InputReader = new Scanner(System.in);
         
-        int firstCoord = -11, secondCoord = -11;
+        int xCoord = -11, yCoord = -11, seperator = -1;
         
         System.out.println("Please Input Coordinates:");
         String input = InputReader.nextLine();
-        while(InputReader.hasNext())
-         {
-             if(InputReader.next())
-             {
-                 if(firstCoord != -11)
-                 {
-                     secondCoord = InputReader.nextInt();
-                     break;
-                 }
-                 else
-                 {
-                     firstCoord = InputReader.nextInt();
-                 }
-             }
-             else
-             {
-                 InputReader.next();
-             }
-         }
+        
+        
         
         //Testing
         System.out.println(randomGenerator.nextInt(10));
