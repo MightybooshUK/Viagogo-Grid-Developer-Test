@@ -16,14 +16,13 @@ public class GridDeveloperTest {
     //Store the 'world' grid
     private static int grid[][] = new int[21][21];
     //Create a list of events
-    private static ArrayList<Event> events = new ArrayList<Event>();
+    private static ArrayList<Event> events = new ArrayList();
     //User inputed coordinates
     private static int xCoord = 0, yCoord = 0;
 
     public static void main(String[] args) 
     {
-        GenerateSeed();
-         System.out.println(grid);
+        GenerateSeed();         
         userInput();
         
         for(int i = 0;i < events.size() ; i++)
@@ -35,8 +34,13 @@ public class GridDeveloperTest {
         
         
         
-        //Testing
-        System.out.println(events.get(0).getId());
+        //Output fove closest and their cheapest prices
+        System.out.println("Event " + events.get(0).getId() + " - $" + events.get(0).getCheapest() + ", Distance " + events.get(0).getDistance());
+        System.out.println("Event " + events.get(1).getId() + " - $" + events.get(1).getCheapest() + ", Distance " + events.get(1).getDistance());
+        System.out.println("Event " + events.get(2).getId() + " - $" + events.get(2).getCheapest() + ", Distance " + events.get(2).getDistance());
+        System.out.println("Event " + events.get(3).getId() + " - $" + events.get(3).getCheapest() + ", Distance " + events.get(3).getDistance());
+        System.out.println("Event " + events.get(4).getId() + " - $" + events.get(4).getCheapest() + ", Distance " + events.get(4).getDistance());
+           
     }
     
     public static void userInput()
@@ -63,10 +67,15 @@ public class GridDeveloperTest {
             else
             {
                 //if there is then take the integer value of the two strings either side of the comma
-                xCoord = Integer.valueOf(input.substring(0,seperator)) + 10;
-                System.out.println(xCoord);
-                yCoord = Integer.valueOf(input.substring(seperator+1)) + 10;
-                System.out.println(yCoord);
+                try
+                {   
+                    xCoord = Integer.valueOf(input.substring(0,seperator)) + 10;
+                    yCoord = 20 - (Integer.valueOf(input.substring(seperator+1)) + 10);
+                }
+                catch(Exception e)
+                {
+                    System.out.println("Please only use integer characters with no spaces!");
+                }
             } 
             
             if(xCoord < 21 && xCoord > -1)
@@ -97,7 +106,18 @@ public class GridDeveloperTest {
     }
     public static void GenerateEvent(int x, int y)
     {
-        Event tempEvent = new Event(events.size(),x,y, randomGenerator.nextInt(101),randomGenerator.nextInt(100) + 1 + randomGenerator.nextFloat());
+        int ticketNo = 0;
+        ArrayList<Ticket> ticketArray = new ArrayList();//
+        ticketNo = randomGenerator.nextInt(50);
+        for(int i = 0; i < ticketNo; i++)
+        {
+            float temp = Math.round((randomGenerator.nextInt(100) + randomGenerator.nextFloat() + 1)*100);
+            temp = temp/100;
+            Ticket tempTicket = new Ticket(temp);
+            ticketArray.add(tempTicket);
+        }
+        Collections.sort(ticketArray);
+        Event tempEvent = new Event(events.size(),x,y, ticketNo,ticketArray);
         events.add(tempEvent);        
         
     }
@@ -106,17 +126,17 @@ public class GridDeveloperTest {
 final class Event implements Comparable<Event>
 {
     private final int ticketNumber, eventId, xCoord, yCoord;
-    private final float ticketPrice;
+    private final ArrayList<Ticket> tickets;
     
     private int distanceTo;
     
-    public Event( int eventId,int xCoord, int yCoord, int number, float price)
+    public Event( int eventId,int xCoord, int yCoord, int number, ArrayList<Ticket> tickets)
     {
         this.eventId = eventId;
         this.xCoord = xCoord;
         this.yCoord = yCoord;
         this.ticketNumber = number;
-        this.ticketPrice = price;
+        this.tickets = tickets;
         
         
     }
@@ -126,9 +146,9 @@ final class Event implements Comparable<Event>
         return ticketNumber;
     }
     
-    public float getPrice()
+    public float getCheapest()
     {
-        return ticketPrice;
+        return tickets.get(0).getPrice();
     }
     
     public int getId()
@@ -136,11 +156,16 @@ final class Event implements Comparable<Event>
         return eventId;
     }  
     
+    public int getDistance()
+    {
+        return distanceTo;
+    }
     public void distance(int xCoord, int yCoord)
     {
         this.distanceTo = Math.abs(yCoord - this.yCoord) + Math.abs(xCoord - this.xCoord);        
     }
 
+    //This method allows the Collections class to order an arraylist of this object by distance
     @Override
     public int compareTo(Event ev) 
     {
@@ -157,5 +182,38 @@ final class Event implements Comparable<Event>
             return -1;
         }
         
+    }
+   
+}
+
+final class Ticket implements Comparable<Ticket>
+{
+    private final float price;
+    
+    public Ticket(float price)
+    {
+        this.price = price;
+    }
+    
+    public float getPrice()
+    {
+        return this.price;
+    }
+
+    @Override
+    public int compareTo(Ticket t) 
+    {
+        if(this.price > t.price)
+        {
+            return 1;
+        }
+        else if(this.price ==  t.price)
+        {
+            return 0;
+        }
+        else 
+        {
+            return -1;
+        }
     }
 }
