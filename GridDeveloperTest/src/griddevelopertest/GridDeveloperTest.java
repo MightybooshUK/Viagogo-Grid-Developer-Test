@@ -22,18 +22,21 @@ public class GridDeveloperTest {
 
     public static void main(String[] args) 
     {
+        //Generate the 'world' and all events
         GenerateSeed();         
+        //Take the user's coordinates
         userInput();        
+        //Calculate the distance from each event to the user
         for(int i = 0;i < events.size() ; i++)
         {           
             events.get(i).distance(xCoord, yCoord);
         }
-        
+        //Sort the events to shortest first
         Collections.sort(events);
         
         
         
-        //Output fove closest and their cheapest prices
+        //Output five closest and their cheapest prices
         System.out.println("Event " + events.get(0).getId() + " - $" + events.get(0).getCheapest() + ", Distance " + events.get(0).getDistance());
         System.out.println("Event " + events.get(1).getId() + " - $" + events.get(1).getCheapest() + ", Distance " + events.get(1).getDistance());
         System.out.println("Event " + events.get(2).getId() + " - $" + events.get(2).getCheapest() + ", Distance " + events.get(2).getDistance());
@@ -89,7 +92,9 @@ public class GridDeveloperTest {
     
     public static void GenerateSeed()
     {
-        int counter = 0;
+        //This method loops through each value in the grid and may populate it with an event
+        
+        int counter = 0;        
         for(int i = 0; i < 20; i++)
         {
             for(int j = 0; j < 20; j++)
@@ -105,28 +110,35 @@ public class GridDeveloperTest {
     }
     public static void GenerateEvent(int x, int y)
     {
+        //This method creates the individual events and all tickets associated with it
         int ticketNo = 0;
         ArrayList<Ticket> ticketArray = new ArrayList();//
         ticketNo = randomGenerator.nextInt(50);
+        
         for(int i = 0; i < ticketNo; i++)
         {
+            //Generate a random price from a whole number between 99 and 0, add a random float between 1 and 0 then ensure it is nonzero by adding 1
             float temp = Math.round((randomGenerator.nextInt(100) + randomGenerator.nextFloat() + 1)*100);
             temp = temp/100;
             Ticket tempTicket = new Ticket(temp);
             ticketArray.add(tempTicket);
         }
+        //Sort the tickets from cheapest to most expensive
         Collections.sort(ticketArray);       
+        //Create the event and add it to the arraylist of events
         Event tempEvent = new Event(events.size(),x,y, ticketNo,ticketArray);
         events.add(tempEvent);        
         
     }
 }
 
+
 final class Event implements Comparable<Event>
 {
+    //The event class holds all associated tickets, the coordinates of the event and the event id
     private final int ticketNumber, eventId, xCoord, yCoord;
     private final ArrayList<Ticket> tickets;
-    
+    //Holds the distance to the user's location
     private int distanceTo;
     
     public Event( int eventId,int xCoord, int yCoord, int number, ArrayList<Ticket> tickets)
@@ -199,6 +211,7 @@ final class Ticket implements Comparable<Ticket>
         return this.price;
     }
 
+    //Again, allows for Collections to sort an ArrayList of this class
     @Override
     public int compareTo(Ticket t) 
     {
