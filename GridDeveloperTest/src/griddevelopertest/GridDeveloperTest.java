@@ -23,10 +23,9 @@ public class GridDeveloperTest {
     public static void main(String[] args) 
     {
         GenerateSeed();         
-        userInput();
-        
+        userInput();        
         for(int i = 0;i < events.size() ; i++)
-        {
+        {           
             events.get(i).distance(xCoord, yCoord);
         }
         
@@ -70,7 +69,7 @@ public class GridDeveloperTest {
                 try
                 {   
                     xCoord = Integer.valueOf(input.substring(0,seperator)) + 10;
-                    yCoord = 20 - (Integer.valueOf(input.substring(seperator+1)) + 10);
+                    yCoord = (Integer.valueOf(input.substring(seperator+1)) + 10);
                 }
                 catch(Exception e)
                 {
@@ -116,7 +115,7 @@ public class GridDeveloperTest {
             Ticket tempTicket = new Ticket(temp);
             ticketArray.add(tempTicket);
         }
-        Collections.sort(ticketArray);
+        Collections.sort(ticketArray);       
         Event tempEvent = new Event(events.size(),x,y, ticketNo,ticketArray);
         events.add(tempEvent);        
         
