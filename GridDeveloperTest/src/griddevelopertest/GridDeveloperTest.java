@@ -50,7 +50,7 @@ public class GridDeveloperTest {
         //Create a scanner
         Scanner InputReader = new Scanner(System.in);
         //Declare variables
-        int xCoord = -11, yCoord = -11, seperator = -1;
+        int seperator = -1;
         boolean validCoordinates = false;
         
         while(!validCoordinates)
